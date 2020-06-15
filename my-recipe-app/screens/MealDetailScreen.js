@@ -1,18 +1,48 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+
+import { MEALS } from '../data/dummy-data';
+import HeaderButton from '../components/HeaderButton';
 
 const MealDetailScreen = (props) => {
+  const mealId = props.navigation.getParam('mealId');
+
+  const selectedMeal = MEALS.find((meal) => meal.id === mealId);
+
   return (
     <View style={styles.screen}>
-      <Text>The Meal Detail Screen!</Text>
+      <Text>{selectedMeal.title}</Text>
+
+      {/* <Text>The Meal Detail Screen!</Text>
       <Button
         title="Go Back to Categories"
         onPress={() => {
           props.navigation.popToTop(); // 최상위로 가기 root
         }}
-      />
+      /> */}
     </View>
   );
+};
+
+MealDetailScreen.navigationOptions = (navigationData) => {
+  const mealId = navigationData.navigation.getParam('mealId');
+  const selectedMeal = MEALS.find((meal) => meal.id === mealId);
+
+  return {
+    headerTitle: selectedMeal.title,
+    headerRight: (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item
+          title="Favorite"
+          iconName="ios-star-outline"
+          onPress={() => {
+            console.log('Mark as favorite!');
+          }}
+        />
+      </HeaderButtons>
+    ),
+  };
 };
 
 const styles = StyleSheet.create({
